@@ -1,7 +1,8 @@
 require 'rspec'
-require 'item'
-require 'attendee'
-require 'auction'
+require 'date'
+require './lib/item'
+require './lib/attendee'
+require './lib/auction'
 
 describe Auction do
   before(:each) do
@@ -110,6 +111,37 @@ describe Auction do
         }
       }
       expect(@auction.bidder_info).to eq expected_info
+    end
+  end
+
+  describe '#date' do
+    it 'returns a formatted date as a string' do
+      @auction_old = Auction.new(Date.parse('2010-10-20'))
+      @auction_future = Auction.new(Date.parse('2100-1-1'))
+      expect(@auction_old.date).to eq '20/10/2010'
+      expect(@auction.date).to eq '26/09/2022'
+      expect(@auction_future.date).to eq '01/01/2100'
+    end
+  end
+
+  describe '#close_auction' do
+    it 'prevents further bidding on all items & returns hash of items sold' do
+      @item1.add_bid(@attendee1, 22)
+      @item1.add_bid(@attendee2, 20)
+      @item4.add_bid(@attendee2, 30)
+      @item4.add_bid(@attendee3, 50)
+      @item3.add_bid(@attendee2, 15)
+      @item5.add_bid(@attendee1, 35)
+
+      expected_close = {
+        @item1 => @attendee2,
+        @item2 => 'Not Sold',
+        @item3 => @attendee2,
+        @item4 => @attendee3,
+        @item5 => @attendee1
+      }
+
+      expect(@auction.close_auction).to eq expected_close
     end
   end
 end

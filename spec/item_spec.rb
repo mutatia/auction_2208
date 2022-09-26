@@ -1,7 +1,7 @@
 require 'rspec'
-require 'item'
-require 'attendee'
-require 'auction'
+require './lib/item'
+require './lib/attendee'
+require './lib/auction'
 
 describe Item do
   before(:each) do
