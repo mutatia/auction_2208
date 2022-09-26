@@ -11,4 +11,12 @@ class Auction
   def item_names
     @items.map {|item| item.name}
   end
+
+  def unpopular_items
+    @items.reject {|item| item.bids.length != 0}
+  end
+
+  def potential_revenue
+    @items.map {|item| item.current_high_bid}.sum
+  end
 end
