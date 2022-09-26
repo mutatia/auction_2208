@@ -60,10 +60,56 @@ describe Auction do
       @auction.add_item(@item2)
       @auction.add_item(@item3)
       @auction.add_item(@item4)
-      @item1.add_bid(@attendee1, 23)
+      @item1.add_bid(@attendee2, 20)
+      @item1.add_bid(@attendee1, 22)
       @item3.add_bid(@attendee2, 15)
       @item1.add_bid(@attendee3, 50)
       expect(@auction.potential_revenue).to eq 65
+    end
+  end
+
+  describe '#bidders' do
+    it 'returns an array of bidder names' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @item1.add_bid(@attendee1, 22)
+      @item1.add_bid(@attendee2, 20)
+      @item3.add_bid(@attendee2, 15)
+      @item1.add_bid(@attendee3, 50)
+      expect(@auction.bidders).to eq ['Megan', 'Bob', 'Mike']
+    end
+  end
+
+  describe '#bidder_info' do
+    it 'returns hash of attendees as keys, with values of a hash with items & budget' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @item1.add_bid(@attendee2, 20)
+      @item1.add_bid(@attendee1, 22)
+      @item3.add_bid(@attendee2, 15)
+      @item1.add_bid(@attendee3, 50)
+      expected_info = {
+
+        @attendee1 => {
+          :budget => 50,
+          :items => [@item1]
+        },
+
+        @attendee2 => {
+          :budget => 75,
+          :items => [@item1, @item3]
+        },
+
+        @attendee3 => {
+          :budget => 100,
+          :items => [@item1]
+        }
+      }
+      expect(@auction.bidder_info).to eq expected_info
     end
   end
 end
