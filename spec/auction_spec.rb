@@ -49,8 +49,8 @@ describe Auction do
       @auction.add_item(@item4)
       @auction.add_item(@item5)
       @item1.add_bid(@attendee1, 23)
-      @item3.add_bid(@attendee2, 34)
-      expect(@auction.unpopular_items).to eq [@item2, @item4]
+      @item3.add_bid(@attendee2, 15)
+      expect(@auction.unpopular_items).to eq [@item2, @item4, @item5]
     end
   end
 
